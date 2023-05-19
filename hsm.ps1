@@ -12,6 +12,11 @@ foreach ($certificate in $certificates) {
         Write-Host "Key Algorithm: $($privateKey.KeyAlgorithm)"
         Write-Host "Key Size (bits): $($privateKey.KeySize)"
         Write-Host "Key Exportable: $($privateKey.Exportable)"
+        if ($privateKey.Exportable) {
+            $keyPath = "C:\Path\To\Save\Keys\$($certificate.Thumbprint).pfx"
+            $privateKey | Export-Certificate -FilePath $keyPath -Password (Read-Host "Enter password for the exported key") -Exportable
+            Write-Host "Exported key for $($certificate.Subject) to $keyPath"
+        }
     } else {
         Write-Host "No private key found for the certificate."
     }
